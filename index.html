@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7f2">
+  <meta name="description" content="原引是为人文社科写作设计的 Mac 工具。在自己的 PDF 中找原文、核对差异，并把引文和印刷页码一起带进论文。">
+  <meta property="og:title" content="原引 | 从 PDF 找回原文和出处">
+  <meta property="og:description" content="跨 PDF 找原话、逐字核对，复制带页码与引用键的引文。">
+  <meta property="og:image" content="https://twobabycoach.github.io/yuan-yin-app/original-search.jpg">
+  <meta property="og:url" content="https://twobabycoach.github.io/yuan-yin-app/">
+  <link rel="canonical" href="https://twobabycoach.github.io/yuan-yin-app/">
+  <link rel="icon" href="app-icon.png" type="image/png">
+  <link rel="stylesheet" href="site.css">
+  <script src="site.js" defer></script>
+  <title>原引 · 从 PDF 找回原文和出处</title>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header">
+    <nav class="container navigation" aria-label="主导航">
+      <a class="brand" href="./" aria-label="原引首页">
+        <img src="app-icon.png" width="38" height="38" alt="">
+        <span>原引 <small lang="en">YuanYin</small></span>
+      </a>
+      <div class="nav-links">
+        <a href="#demo">试用演示</a>
+        <a href="#features">功能</a>
+        <a href="https://github.com/twobabycoach/yuan-yin-app/releases">版本记录</a>
+      </div>
+      <a class="button button-small button-outline" href="#download">获取 Mac 版</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero-layout">
+        <div class="hero-copy">
+          <p class="eyebrow">为人文社科写作设计的 Mac 工具</p>
+          <h1 id="hero-title">找到原文，<br><span>带出处引用。</span></h1>
+          <p class="hero-description">在自己的 PDF 里找回记得的那句话，点开便是原页。核过文字和页码，就能把引文连同 Zotero 引用键带进论文。</p>
+          <div class="action-row">
+            <a class="button button-primary" href="https://github.com/twobabycoach/yuan-yin-app/releases/download/v0.12.0/YuanYin-0.12.0-macOS-arm64.zip">下载 Mac 版 <span aria-hidden="true">↓</span></a>
+            <a class="button button-outline" href="#demo">试着找一句 <span aria-hidden="true">↘</span></a>
+          </div>
+          <p class="requirements">v0.12.0 <span aria-hidden="true">·</span> Apple 芯片 <span aria-hidden="true">·</span> macOS 13+</p>
+        </div>
+        <figure class="hero-figure">
+          <a class="screenshot" href="original-search.jpg" aria-label="打开原文检索大图">
+            <img src="original-search.jpg" width="1800" height="1145" alt="原引的原文检索界面。用简体搜索词定位繁体原句，PDF 原页只高亮命中的文字，旁边同时显示 PDF 第 1 页和原书印刷页第 18 页。">
+          </a>
+          <figcaption><span class="caption-dot" aria-hidden="true"></span> Mac 实机界面，使用演示资料</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="demo-section" id="demo" aria-labelledby="demo-title">
+      <div class="container">
+        <div class="section-intro">
+          <p class="eyebrow">浏览器演示</p>
+          <h2 id="demo-title">记得大意，也能找回原话。</h2>
+          <p>用简体查繁体，或试着输错一个字。这里用三页示例资料，输入只在浏览器里处理。</p>
+        </div>
+        <div class="demo">
+          <div class="demo-controls">
+            <form class="search-form" id="demo-form" role="search" aria-label="检索演示资料">
+              <label for="demo-query">检索词</label>
+              <div class="input-row">
+                <input id="demo-query" name="query" type="search" value="劳动过程与资本积累" maxlength="80" autocomplete="off" placeholder="输入记得的几个字" required>
+                <button class="button button-primary" type="submit">检索</button>
+              </div>
+            </form>
+            <div class="sample-controls">
+              <span>试个例子</span>
+              <button class="sample" type="button" data-query="劳动过程与资本积累" aria-pressed="true">繁简通查</button>
+              <button class="sample" type="button" data-query="地方档安" aria-pressed="false">一字之差</button>
+              <button class="sample" type="button" data-query="合作方式" aria-pressed="false">查关键词</button>
+            </div>
+            <p class="demo-status" id="demo-status" role="status">找到 1 条 · 繁简匹配</p>
+            <label class="result-picker" id="demo-result-picker" hidden>选择原页 <select id="demo-results"></select></label>
+            <div id="demo-source" class="source">
+              <p class="source-title" id="demo-source-title">繁體演示資料</p>
+              <dl>
+                <div><dt>原书印刷页</dt><dd id="demo-print-page">18</dd></div>
+                <div><dt>PDF 页序</dt><dd id="demo-pdf-page">1</dd></div>
+              </dl>
+            </div>
+            <noscript><p>开启 JavaScript 后可以检索并复制示例。</p></noscript>
+          </div>
+          <div class="demo-paper" id="demo-paper">
+            <div class="paper-body">
+              <p class="paper-label">原页节选 <span id="demo-match">繁简匹配</span></p>
+              <p class="paper-quote" id="demo-quote" tabindex="-1"><mark>勞動過程與資本積累</mark>。</p>
+              <p class="paper-context" id="demo-context">核对时，可翻到这一页查看引文的前后文。</p>
+            </div>
+            <div class="paper-citation">
+              <code id="demo-citation">[@yuanyinDemo, p. 18]</code>
+              <button class="button button-small button-outline" id="demo-copy" type="button">复制引文</button>
+            </div>
+            <textarea id="demo-copy-value" aria-label="手动复制示例引文" rows="2" readonly hidden></textarea>
+            <p class="sr-only" id="copy-status" role="status"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features-section" id="features" aria-labelledby="features-title">
+      <div class="container">
+        <div class="section-intro">
+          <p class="eyebrow">在同一个窗口完成</p>
+          <h2 id="features-title">找句子，核出处，写进论文。</h2>
+        </div>
+        <div class="feature-grid">
+          <article>
+            <h3>从扫描件里找原文</h3>
+            <p>导入文件夹，对扫描页做中英文 OCR。按原句、近似片段或组合条件检索，也可以只查选中的文献组。</p>
+          </article>
+          <article>
+            <h3>逐字核对现有引文</h3>
+            <p>粘贴一段话或导入一份引文清单。查看增字、缺字和候选出处，回原页核实，再把结果与高亮截图一起导出到 Excel。</p>
+          </article>
+          <article>
+            <h3>连印刷页码一起复制</h3>
+            <p>校准一次连续页段后，同一页段可沿用。带上 Zotero 引用键，按 Pandoc Markdown、LaTeX 或纯文本复制，也可单独收藏。</p>
+          </article>
+        </div>
+        <div class="check-example">
+          <div>
+            <h3>找到了，再看有没有引错。</h3>
+            <p>写成了「检验」，原文是「检查」。原句核对把两个字标在各自的句子里，点「查看原页」即可复核。</p>
+          </div>
+          <a class="screenshot" href="quote-check.jpg" aria-label="打开原句核对大图">
+            <img src="quote-check.jpg" width="1360" height="890" loading="lazy" alt="原句核对界面，左侧引文高亮多出的「验」，右侧原文高亮应补入的「查」。">
+          </a>
+        </div>
+        <div class="secondary-features">
+          <div>
+            <h3>从 Zotero 延续现有资料库</h3>
+            <p>选择本机 Zotero 的一个分类，预览变化后同步 PDF 附件和题录。可手动刷新，也可以保留自己整理的分组。</p>
+          </div>
+          <div>
+            <h3>用自己的话查主题</h3>
+            <p>连接本机 Ollama 向量模型后，可以用问题检索相关段落。Codex 等工具也能通过只读 MCP 查出处、比引文或提出版本对应页建议。</p>
+          </div>
+          <div>
+            <h3>在不同版本间来回查证</h3>
+            <p>并排看原文、译本或再版。确认过的对应页可保存，下次回找可直接跳到相应位置。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="download-section" id="download" aria-labelledby="download-title">
+      <div class="container download-panel">
+        <div>
+          <img src="app-icon.png" width="64" height="64" alt="">
+          <h2 id="download-title">在 Mac 上使用原引</h2>
+          <p>解压后把「原引」移到「应用程序」。打开 App，点「添加文献」，选一份 PDF 或文件夹开始。</p>
+          <p class="fine-print">适用 Apple 芯片及 macOS 13 或更新版本。当前安装包采用临时签名，尚未经 Apple 公证。OCR 引文请对照原页确认。</p>
+        </div>
+        <div class="download-actions">
+          <a class="button button-primary" href="https://github.com/twobabycoach/yuan-yin-app/releases/download/v0.12.0/YuanYin-0.12.0-macOS-arm64.zip">下载原引 v0.12.0 <span aria-hidden="true">↓</span></a>
+          <a class="inline-link" href="https://github.com/twobabycoach/yuan-yin-app/releases/tag/v0.12.0">版本说明与校验值 <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-layout">
+      <p><strong>原引</strong> <span>YuanYin for Mac</span></p>
+      <a href="https://github.com/twobabycoach/yuan-yin-app">GitHub <span aria-hidden="true">↗</span></a>
+    </div>
+  </footer>
+</body>
+</html>
